@@ -5,6 +5,14 @@ export const useDesignStore = create((set) => ({
     activeTool: 'box',
     setActiveTool: (tool) => set({ activeTool: tool }),
 
+    // Model Library State
+    isLibraryOpen: false,
+    setLibraryOpen: (isOpen) => set({ isLibraryOpen: isOpen }),
+    selectedModel: null,
+    setSelectedModel: (model) => set({ selectedModel: model }),
+    modelParams: { width: 200, height: 150, depth: 100, thickness: 2 },
+    setModelParams: (params) => set((state) => ({ modelParams: { ...state.modelParams, ...params } })),
+
     // Canvas State
     canvasColor: '#ffffff',
     elements: [],

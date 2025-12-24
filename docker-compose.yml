@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+  frontend:
+    # Use 'image' if you push to a registry, or 'build' if building locally/CI
+    # For Portainer, you often pull from a registry. 
+    # REPLACE 'your-username/luminapack:latest' with your actual image path
+    image: ghcr.io/alexgr15/ai-packaging-design:latest
+    deploy:
+      replicas: 1
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.luminapack.rule=Host(`test.gidpe.com.ar`)"
+        - "traefik.http.routers.luminapack.entrypoints=websecure"
+        - "traefik.http.routers.luminapack.tls=true"
+        - "traefik.http.routers.luminapack.service=luminapack"
+        - "traefik.http.routers.luminapack.tls.certresolver=letsencryptresolver"
+        - "traefik.http.services.luminapack.loadbalancer.server.port=80"
+      restart_policy:
+        condition: on-failure
+    networks:
+      - frontend
+      - backend-net
+
+  backend:
+    image: ghcr.io/alexgr15/ai-packaging-backend:latest
+    deploy:
+      replicas: 1
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.luminapack-api.rule=Host(`api.test.gidpe.com.ar`)"
+        - "traefik.http.routers.luminapack-api.entrypoints=websecure"
+        - "traefik.http.routers.luminapack-api.tls=true"
+        - "traefik.http.routers.luminapack-api.tls.certresolver=letsencryptresolver"
+        - "traefik.http.services.luminapack-api.loadbalancer.server.port=3000"
+    environment:
+      - DATABASE_URL=postgresql://user:password@db:5432/luminapack
+    networks:
+      - backend-net
+
+  db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: luminapack
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    networks:
+      - backend-net
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
+
+volumes:
+  db-data:
+
+
+networks:
+  # Network for public access (Traefik -> Frontend/API)
+  frontend:
+    external: true
+  # Internal network for Backend <-> DB communication
+  backend-net:
+    driver: overlay

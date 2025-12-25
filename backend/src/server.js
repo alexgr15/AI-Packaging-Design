@@ -7,13 +7,18 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+const authRoutes = require('./routes/authRoutes');
+
 // Middlewares
 app.use(helmet()); // Security headers
 app.use(cors()); // Allow cross-origin requests
 app.use(express.json()); // Parse JSON bodies
 app.use(morgan('dev')); // Logger
 
-// Routes
+// API Routes
+app.use('/api/auth', authRoutes);
+
+// Base Routes
 app.get('/', (req, res) => {
     res.json({ message: 'LuminaPack AI API is running 🚀', version: '1.0.0' });
 });

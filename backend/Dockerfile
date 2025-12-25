@@ -12,7 +12,7 @@ RUN npm install
 COPY . .
 
 # Generate Prisma Client
-# RUN npx prisma generate
+RUN npx prisma generate
 
 EXPOSE 3000
 

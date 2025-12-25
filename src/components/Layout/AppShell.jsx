@@ -44,10 +44,20 @@ export const AppShell = ({ children }) => {
                 </div>
 
                 <div className="actions" style={{ display: 'flex', gap: '1rem' }}>
-                    <div style={{ padding: '0.5rem 1rem', background: 'rgba(255,255,255,0.1)', borderRadius: '6px', fontSize: '0.8rem' }}>
-                        Organization: {tenant ? tenant.id : 'Demo'}
+                    <div className="flex items-center gap-2" style={{ padding: '0.5rem 1rem', background: 'rgba(255,255,255,0.1)', borderRadius: '6px', fontSize: '0.8rem' }}>
+                        <span>Org: {tenant ? tenant.id : 'Demo'}</span>
+                        <span className="text-yellow-400 font-bold border-l border-white/20 pl-2">v1.2 (DEBUG)</span>
                     </div>
-                    <button className="btn-primary flex-center" style={{ gap: '0.5rem' }}>
+                    <button className="flex-center" style={{
+                        gap: '0.5rem',
+                        padding: '0.5rem 1.5rem',
+                        background: '#f97316', // Orange-500
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '8px',
+                        fontWeight: 'bold',
+                        cursor: 'pointer'
+                    }}>
                         <Save size={18} /> Save Project
                     </button>
                 </div>

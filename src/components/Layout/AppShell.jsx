@@ -2,6 +2,7 @@ import { Sidebar } from './Sidebar';
 import { PropertiesPanel } from './PropertiesPanel';
 import { Save } from 'lucide-react';
 import { useTenant } from '../../context/TenantContext'; // Fix import path depending on file location
+import { ModelLibrary } from '../Library/ModelLibrary';
 // Assuming AppShell is in components/Layout
 // TenantContext is in ../../context/TenantContext
 
@@ -17,6 +18,7 @@ export const AppShell = ({ children }) => {
             width: '100vw',
             background: 'var(--bg-app)'
         }}>
+            <ModelLibrary />
             {/* Header */}
             <header className="glass-panel" style={{
                 gridColumn: '1 / -1',

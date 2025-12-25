@@ -8,7 +8,7 @@ export const PropertiesPanel = () => {
 
     const renderContent = () => {
         switch (activeTool) {
-            case 'model':
+            case 'box':
                 return (
                     <div className="space-y-4">
                         <div className="p-4 bg-[var(--bg-secondary)] rounded-lg border border-[var(--glass-border)] text-center">

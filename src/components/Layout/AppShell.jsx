@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 import { Sidebar } from './Sidebar';
 import { PropertiesPanel } from './PropertiesPanel';
-import { Save, FolderOpen } from 'lucide-react';
+import { Save, FolderOpen, LogOut } from 'lucide-react';
 import { useTenant } from '../../context/TenantContext'; // Fix import path depending on file location
 import { ModelLibrary } from '../Library/ModelLibrary';
 import { useDesignStore } from '../../store/designStore';
@@ -34,6 +34,11 @@ export const AppShell = ({ children }) => {
         } finally {
             setIsSaving(false);
         }
+    };
+
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        window.location.reload();
     };
 
     return (
@@ -107,6 +112,20 @@ export const AppShell = ({ children }) => {
                             cursor: 'pointer'
                         }}>
                         <Save size={18} /> {isSaving ? 'Saving...' : 'Save Project'}
+                    </button>
+
+                    <button
+                        onClick={handleLogout}
+                        title="Logout"
+                        className="flex-center hover:bg-red-500/20 hover:text-red-400 transition-colors" style={{
+                            padding: '0.5rem',
+                            background: 'transparent',
+                            color: 'var(--text-muted)',
+                            border: '1px solid var(--glass-border)',
+                            borderRadius: '8px',
+                            cursor: 'pointer'
+                        }}>
+                        <LogOut size={18} />
                     </button>
                 </div>
             </header>

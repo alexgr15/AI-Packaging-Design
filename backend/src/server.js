@@ -8,6 +8,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 const authRoutes = require('./routes/authRoutes');
+const projectRoutes = require('./routes/projectRoutes');
 
 // Middlewares
 app.use(helmet()); // Security headers
@@ -17,6 +18,7 @@ app.use(morgan('dev')); // Logger
 
 // API Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/projects', projectRoutes);
 
 // Base Routes
 app.get('/', (req, res) => {

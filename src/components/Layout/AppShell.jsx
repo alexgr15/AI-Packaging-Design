@@ -1,13 +1,40 @@
+import { useRef, useState } from 'react';
 import { Sidebar } from './Sidebar';
 import { PropertiesPanel } from './PropertiesPanel';
-import { Save } from 'lucide-react';
+import { Save, FolderOpen } from 'lucide-react';
 import { useTenant } from '../../context/TenantContext'; // Fix import path depending on file location
 import { ModelLibrary } from '../Library/ModelLibrary';
-// Assuming AppShell is in components/Layout
-// TenantContext is in ../../context/TenantContext
+import { useDesignStore } from '../../store/designStore';
+import { ProjectListModal } from '../Dashboard/ProjectListModal';
 
 export const AppShell = ({ children }) => {
     const { tenant } = useTenant();
+    const { saveProject } = useDesignStore();
+    const [projectModalOpen, setProjectModalOpen] = useState(false);
+    const [isSaving, setIsSaving] = useState(false);
+
+    const handleSave = async () => {
+        setIsSaving(true);
+        try {
+            // Check auth token
+            if (!localStorage.getItem('token')) {
+                alert('Please Login to Save Projects');
+                // You might want to trigger the login modal here via state/event
+                return;
+            }
+
+            const name = prompt('Enter project name:', `Project ${new Date().toLocaleTimeString()}`);
+            if (!name) return;
+
+            await saveProject(name);
+            alert('Project Saved Successfully!');
+        } catch (err) {
+            console.error(err);
+            alert('Error saving project: ' + err.message);
+        } finally {
+            setIsSaving(false);
+        }
+    };
 
     return (
         <div className="app-shell" style={{
@@ -19,6 +46,8 @@ export const AppShell = ({ children }) => {
             background: 'var(--bg-app)'
         }}>
             <ModelLibrary />
+            {projectModalOpen && <ProjectListModal onClose={() => setProjectModalOpen(false)} />}
+
             {/* Header */}
             <header className="glass-panel" style={{
                 gridColumn: '1 / -1',
@@ -48,17 +77,36 @@ export const AppShell = ({ children }) => {
                         <span>Org: {tenant ? tenant.id : 'Demo'}</span>
                         <span className="text-yellow-400 font-bold border-l border-white/20 pl-2">v1.2 (DEBUG)</span>
                     </div>
-                    <button className="flex-center" style={{
-                        gap: '0.5rem',
-                        padding: '0.5rem 1.5rem',
-                        background: '#f97316', // Orange-500
-                        color: 'white',
-                        border: 'none',
-                        borderRadius: '8px',
-                        fontWeight: 'bold',
-                        cursor: 'pointer'
-                    }}>
-                        <Save size={18} /> Save Project
+
+                    <button
+                        onClick={() => setProjectModalOpen(true)}
+                        className="flex-center hover:bg-white/10 transition-colors" style={{
+                            gap: '0.5rem',
+                            padding: '0.5rem 1rem',
+                            background: 'transparent',
+                            color: 'white',
+                            border: '1px solid var(--glass-border)',
+                            borderRadius: '8px',
+                            fontWeight: 'medium',
+                            cursor: 'pointer'
+                        }}>
+                        <FolderOpen size={18} /> Open
+                    </button>
+
+                    <button
+                        onClick={handleSave}
+                        disabled={isSaving}
+                        className="flex-center hover:opacity-90 transition-opacity disabled:opacity-50" style={{
+                            gap: '0.5rem',
+                            padding: '0.5rem 1.5rem',
+                            background: '#f97316', // Orange-500
+                            color: 'white',
+                            border: 'none',
+                            borderRadius: '8px',
+                            fontWeight: 'bold',
+                            cursor: 'pointer'
+                        }}>
+                        <Save size={18} /> {isSaving ? 'Saving...' : 'Save Project'}
                     </button>
                 </div>
             </header>

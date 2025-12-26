@@ -2,6 +2,7 @@ import { LogoManager } from '../Tools/LogoManager';
 import { ColorPicker } from '../Tools/ColorPicker';
 import { AIGenerator } from '../Tools/AIGenerator';
 import { useDesignStore } from '../../store/designStore';
+import { Box } from 'lucide-react';
 
 export const PropertiesPanel = () => {
     const { activeTool, setLibraryOpen } = useDesignStore();

@@ -28,7 +28,7 @@ services:
       replicas: 1
       labels:
         - "traefik.enable=true"
-        - "traefik.http.routers.luminapack-api.rule=Host(`api.test.gidpe.com.ar`)"
+        - "traefik.http.routers.luminapack-api.rule=Host(`apitest.gidpe.com.ar`)"
         - "traefik.http.routers.luminapack-api.entrypoints=websecure"
         - "traefik.http.routers.luminapack-api.tls=true"
         - "traefik.http.routers.luminapack-api.tls.certresolver=letsencryptresolver"

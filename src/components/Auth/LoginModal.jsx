@@ -18,7 +18,7 @@ export const LoginModal = () => {
             const endpoint = isLogin ? '/api/auth/login' : '/api/auth/register';
             // Basic fetch to our backend
             // Note: In dev, we need proxy or full URL. Using full URL for test environment if reachable
-            const API_URL = import.meta.env.VITE_API_URL || 'https://api.test.gidpe.com.ar';
+            const API_URL = import.meta.env.VITE_API_URL || 'https://apitest.gidpe.com.ar';
 
             const res = await fetch(`${API_URL}${endpoint}`, {
                 method: 'POST',

@@ -16,7 +16,7 @@ exports.saveProject = async (req, res) => {
         if (id) {
             // Update existing project
             // Verify ownership
-            const existing = await prisma.project.findUnique({ where: { id: parseInt(id) } });
+            const existing = await prisma.project.findUnique({ where: { id } });
 
             if (!existing) {
                 return res.status(404).json({ error: 'Project not found' });
@@ -27,7 +27,7 @@ exports.saveProject = async (req, res) => {
             }
 
             project = await prisma.project.update({
-                where: { id: parseInt(id) },
+                where: { id },
                 data: { name, data, updatedAt: new Date() }
             });
         } else {
@@ -71,7 +71,7 @@ exports.getProjectById = async (req, res) => {
 
         const project = await prisma.project.findFirst({
             where: {
-                id: parseInt(id),
+                id,
                 userId
             }
         });
